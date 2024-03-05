@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { TopicModel } from '../../models/mongoDataModels'; // Assuming you have defined the TopicModel in models.ts
 import Heatmap from './component/heatmap';
 import { getCourses } from './lib/fetchCourses';
 
