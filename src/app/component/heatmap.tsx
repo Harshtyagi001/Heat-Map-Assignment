@@ -1,14 +1,16 @@
 "use-client";
 
-import { GetServerSideProps } from 'next';
 import { Course } from '../lib/models'; 
 
+// Interface defined for the props of the component
 interface HeatmapProps {
   courses: Course[];
 }
 
+// This is the component which is by-default server side but to enable user ineration , I have to make it client side by using "use-client" pragma but data is still being fetched from server side, so it is well-organized and no delay in data fetcging is there.
+
 export default function HeatMap({ courses }: HeatmapProps) {
-  console.log("I am heatmap page");
+  // console.log("I am heatmap page");
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <h1 className="text-4xl font-bold text-center mb-8">Welcome to My Quizzy Heatmap</h1>
@@ -23,6 +25,9 @@ export default function HeatMap({ courses }: HeatmapProps) {
     </div>
   );
 }
+
+
+// I was also trying to do this , but is older version now, so I  an working with App-Router now. 
 
 // export const getServerSideProps: GetServerSideProps<HeatmapProps> = async () => {
 //   try {
