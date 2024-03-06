@@ -3,8 +3,6 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 import "react-circular-progressbar/dist/styles.css";
 
-// This is the Progress Bar component for that I am Using the "react-circular-progressbar" library to create the circular progress bar for the heatmap of the courses.
-
 const CircularProgression = ({ serviceTab, index, marks }: {
   serviceTab: any[];
   index: number;
@@ -21,7 +19,9 @@ const CircularProgression = ({ serviceTab, index, marks }: {
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting && percentages < marks) {
-              clearInterval(intervalRef.current);
+              if (intervalRef.current) {
+                clearInterval(intervalRef.current as number);
+              }
               intervalRef.current = setInterval(() => {
                 setPercentages(prevPercentage => {
                   const nextPercentage = prevPercentage + 1;
@@ -42,7 +42,7 @@ const CircularProgression = ({ serviceTab, index, marks }: {
         observerRef.current.disconnect();
       }
       if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+        clearInterval(intervalRef.current as number);
       }
     };
   }, [marks]);
