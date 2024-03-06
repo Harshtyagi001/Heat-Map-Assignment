@@ -10,7 +10,7 @@ interface HeatmapProps {
 }
 
 
-// This is the component which is by-default server side but to enable user ineration , I have to make it client side by using "use-client" pragma but data is still being fetched from server side, so it is well-organized and no delay in data fetcging is there.
+// This is the component which is by-default server side but to enable user interaction , I have to make it client side by using "use client" pragma but data is still being fetched from server side, so it is well-organized and no delay in data fetching is there.
 
 export default function HeatMap({ courses }: HeatmapProps) {
   // console.log("I am heatmap page");
@@ -20,7 +20,7 @@ export default function HeatMap({ courses }: HeatmapProps) {
     setSelectedCourse(course);
   };
 
-  // I am makin custom heatmap color for the courses, so that it looks more interactive and user-friendly
+  // I am making custom heatmap color for the courses, so that it looks more intuitive
   const calculateColor = (marks: number) => {
     
     const MAX_MARKS=100;
@@ -41,37 +41,34 @@ export default function HeatMap({ courses }: HeatmapProps) {
 
   return (
     <>
-    <h1 className="text-4xl font-bold text-center mb-8">Welcome to My Quizzy Heatmap</h1>
+    <h1 className="text-4xl font-bold text-center mb-8 mt-4">Quizzy's Heatmap Assignment</h1>
     <div className="flex flex-col justify-center items-center w-auto md:flex-row px-[10%]">
-      <div className="grid lg:grid-cols-5 justify-center gap-4 px-2 md:grid-cols-3 md:px-2 sm: grid-cols-2"> {/* Updated container */}
-        {courses?.map((course: Course, index: number) => (
-          <div key={index} className="w-full flex items-center"> {/* Updated column width */}
+      <div className="grid lg:grid-cols-5 justify-center gap-4 px-2 md:grid-cols-3 md:px-2 sm: grid-cols-2">
+        {courses?.map((course: Course, index: number) => (  
+          <div key={index} className="w-full ">
             <div style={{ backgroundColor: calculateColor(course.marks)}}
-            onClick={() => handleClick(course)} className="text-yellow-600 p-4 border border-gray-300 rounded-lg cursor-pointer hover: bg-transparent"
+            onClick={() => handleClick(course)} className="text-[#FFA500] p-4 border border-gray-300 rounded-lg cursor-pointer hover: bg-transparent"
             >
-              <h2 className="xl:text-lg font-semibold sm:text-sm ">{course.name}</h2>
+              <h2 className="xl:text-lg font-semibold sm:text-sm break-all">{course.name}</h2>
               <p className="text-sm">Marks: {course.marks}</p>
             </div>
           </div>
         ))}
       </div>
-      <div className="flex items-center"> {/* Updated loader container */}
-       {/* {selectedCourse ? `${selectedCourse.name}: ${selectedCourse.marks}` : ''} */}
-        {/* <HeatMapLoader/> */}
+      <div className="flex items-center">
         {selectedCourse && (
-            <div className="w-full h-full">
+            <div className="w-full h-full mt-4">
               <div className="flex lg:justify-around lg:flex-row flex-col justify-center">
                 <div className="flex flex-col items-center">
                   <div className="text-3xl text-yellow-700">{selectedCourse.name}</div>
                   <div>
-                    <CircularProgression serviceTab={courses} index={courses.indexOf(selectedCourse)}  marks={selectedCourse.marks} />
+                    <CircularProgression serviceTab={courses} index={courses.indexOf(selectedCourse)}  marks={selectedCourse.marks} />   {/* This is for showing percentage inside loader when particular course is clicked*/}
                   </div>
                 </div>
               </div>
             </div>
           )}
       </div>
-     
       </div>
       </>
   );

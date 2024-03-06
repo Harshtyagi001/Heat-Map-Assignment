@@ -21,7 +21,7 @@ import { connectToDb } from './dbConnect';
 // ];
 
 
-//  Util function to fetch the courses from the database
+//  Utility function to fetch the courses from the database
 export const getCourses=async()=>{
    try{
     await connectToDb();

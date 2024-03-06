@@ -6,7 +6,7 @@ import "react-circular-progressbar/dist/styles.css";
 const CircularProgression = ({ serviceTab, index, marks }: {
   serviceTab: any[];
   index: number;
-  marks: number; // Accept marks as a prop
+  marks: number; // Accepting marks as a prop to update the percentage
 }) => {
   const [percentages, setPercentages] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
