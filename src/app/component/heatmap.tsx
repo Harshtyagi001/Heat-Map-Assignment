@@ -1,7 +1,6 @@
 'use client';
 import { Course } from '../lib/models';
 import { useState } from 'react';
-import { RingProgress, Text } from '@mantine/core';
 import CircularProgression from './CircularProgression';
 
 // Interface defined for the props of the component
