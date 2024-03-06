@@ -1,7 +1,6 @@
 'use client';
 import { Course } from '../lib/models';
 import { useState } from 'react';
-import { HeatMapLoader } from './HeatMapLoader';
 import { RingProgress, Text } from '@mantine/core';
 import CircularProgression from './CircularProgression';
 
