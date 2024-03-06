@@ -11,7 +11,7 @@ const CircularProgression = ({ serviceTab, index, marks }: {
   const [percentages, setPercentages] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | number | null>(null); // Update type
 
   useEffect(() => {
     if (containerRef.current) {
@@ -19,8 +19,8 @@ const CircularProgression = ({ serviceTab, index, marks }: {
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting && percentages < marks) {
-              if (intervalRef.current) {
-                clearInterval(intervalRef.current as number);
+              if (intervalRef.current !== null) { // Check if intervalRef.current is not null
+                clearInterval(intervalRef.current as NodeJS.Timeout);
               }
               intervalRef.current = setInterval(() => {
                 setPercentages(prevPercentage => {
@@ -41,8 +41,8 @@ const CircularProgression = ({ serviceTab, index, marks }: {
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current as number);
+      if (intervalRef.current !== null) { // Check if intervalRef.current is not null
+        clearInterval(intervalRef.current as NodeJS.Timeout);
       }
     };
   }, [marks]);
