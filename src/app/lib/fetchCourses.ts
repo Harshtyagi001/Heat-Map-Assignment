@@ -26,11 +26,11 @@ export const getCourses=async()=>{
    try{
     await connectToDb();
     const courses = await CourseModel.find({});
-    console.log("Courses fetched successfully", courses);
+   //  console.log("Courses fetched successfully", courses);
     return courses;
    }
    catch(error){
-    console.log("Error while fetching courses", error);
+   //  console.log("Error while fetching courses", error);
     throw new Error("Error while fetching courses");
    }
 }

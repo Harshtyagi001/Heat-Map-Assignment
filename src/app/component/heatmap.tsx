@@ -2,6 +2,9 @@
 import { Course } from '../lib/models';
 import { useState } from 'react';
 import { HeatMapLoader } from './HeatMapLoader';
+import { RingProgress, Text } from '@mantine/core';
+import CircularProgression from './CircularProgression';
+
 // Interface defined for the props of the component
 interface HeatmapProps {
   courses: Course[];
@@ -17,28 +20,68 @@ export default function HeatMap({ courses }: HeatmapProps) {
   const handleClick = (course: Course) => {
     setSelectedCourse(course);
   };
+
+  // I am makin custom heatmap color for the courses, so that it looks more interactive and user-friendly
+  const calculateColor = (marks: number) => {
+    
+    const MAX_MARKS=100;
+    const MIN_MARKS=0;
+    const maxColor=[0,0,0]; // RGB values for maximum color (black)
+    const minColor=[255,255,255]; // RGB values for minimum color (white)
+    
+    // Normalize marks between 0 and 1
+    const normalizedMarks=(marks-MIN_MARKS)/(MAX_MARKS-MIN_MARKS);
+
+    const color=minColor.map((channel, index) =>{
+      return Math.round(channel+(maxColor[index]-channel)*normalizedMarks);
+    });
+
+    // Return the color in rgba format
+    return `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.9)`; // Adjusting the Alpha Channel
+  };
+
   return (
     <>
     <h1 className="text-4xl font-bold text-center mb-8">Welcome to My Quizzy Heatmap</h1>
     <div className="flex flex-col justify-center items-center w-auto md:flex-row px-[10%]">
-      <div className="grid lg:grid-cols-5 justify-center gap-4 px-4 md:grid-cols-3 md:px-2 sm: grid-cols-1"> {/* Updated container */}
+      <div className="grid lg:grid-cols-5 justify-center gap-4 px-2 md:grid-cols-3 md:px-2 sm: grid-cols-2"> {/* Updated container */}
         {courses?.map((course: Course, index: number) => (
-          <div key={index} className="w-full "> {/* Updated column width */}
-            <div onClick={() => handleClick(course)} className="p-4 border border-gray-300 rounded-lg cursor-pointer hover: bg-transparent">
-              <h2 className="text-lg font-semibold">{course.name}</h2>
+          <div key={index} className="w-full flex items-center"> {/* Updated column width */}
+            <div style={{ backgroundColor: calculateColor(course.marks)}}
+            onClick={() => handleClick(course)} className="text-yellow-600 p-4 border border-gray-300 rounded-lg cursor-pointer hover: bg-transparent"
+            >
+              <h2 className="xl:text-lg font-semibold sm:text-sm ">{course.name}</h2>
               <p className="text-sm">Marks: {course.marks}</p>
             </div>
           </div>
         ))}
       </div>
       <div className="flex items-center"> {/* Updated loader container */}
-       {selectedCourse ? `${selectedCourse.name}: ${selectedCourse.marks}` : ''}
-        {/* <HeatMapLoader /> */}
+       {/* {selectedCourse ? `${selectedCourse.name}: ${selectedCourse.marks}` : ''} */}
+        {/* <HeatMapLoader/> */}
+        {selectedCourse && (
+            <div className="w-full h-full">
+              <div className="flex lg:justify-around lg:flex-row flex-col justify-center">
+                <div className="flex flex-col items-center">
+                  <div className="text-3xl text-yellow-700">{selectedCourse.name}</div>
+                  <div>
+                    <CircularProgression serviceTab={courses} index={courses.indexOf(selectedCourse)}  marks={selectedCourse.marks} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
       </div>
+     
       </div>
       </>
   );
 }
+
+
+
+
+
 
 
 // I was also trying to do this , but is older version now, so I  an working with App-Router now. 
