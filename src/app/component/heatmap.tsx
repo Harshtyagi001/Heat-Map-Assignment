@@ -41,7 +41,7 @@ export default function HeatMap({ courses }: HeatmapProps) {
 
   return (
     <>
-    <h1 className="text-4xl font-bold text-center mb-8 mt-4">Quizzy's Heatmap Assignment</h1>
+    <h1 className="text-4xl font-bold text-center mb-8 mt-4">Quizzy Heatmap Assignment</h1>
     <div className="flex flex-col justify-center items-center w-auto md:flex-row px-[10%]">
       <div className="grid lg:grid-cols-5 justify-center gap-4 px-2 md:grid-cols-3 md:px-2 sm: grid-cols-2">
         {courses?.map((course: Course, index: number) => (  
