@@ -1,13 +1,12 @@
 'use client';
 import { Course } from '../lib/models';
-import { useState } from 'react';
+import { useState , useMemo } from 'react';
 import CircularProgression from './CircularProgression';
 
 // Interface defined for the props of the component
 interface HeatmapProps {
   courses: Course[];
 }
-
 
 // This is the component which is by-default server side but to enable user interaction , I have to make it client side by using "use client" pragma but data is still being fetched from server side, so it is well-organized and no delay in data fetching is there.
 
@@ -20,19 +19,21 @@ export default function HeatMap({ courses }: HeatmapProps) {
   };
 
   // I am making custom heatmap color for the courses, so that it looks more intuitive
-  const calculateColor = (marks: number) => {
-    
+  const CalculateColor = (marks: number) => {
+
     const MAX_MARKS=100;
     const MIN_MARKS=0;
     const maxColor=[0,0,0]; // RGB values for maximum color (black)
     const minColor=[255,255,255]; // RGB values for minimum color (white)
-    
+
     // Normalize marks between 0 and 1
     const normalizedMarks=(marks-MIN_MARKS)/(MAX_MARKS-MIN_MARKS);
 
-    const color=minColor.map((channel, index) =>{
-      return Math.round(channel+(maxColor[index]-channel)*normalizedMarks);
-    });
+    const color = useMemo(() => {
+        return minColor.map((channel, index) => {
+        return Math.round(channel + (maxColor[index] - channel) * normalizedMarks);
+      });
+    }, [normalizedMarks]);
 
     // Return the color in rgba format
     return `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.9)`; // Adjusting the Alpha Channel
@@ -43,9 +44,9 @@ export default function HeatMap({ courses }: HeatmapProps) {
     <h1 className="text-4xl font-bold text-center mb-8 mt-4">Quizzy Heatmap Assignment</h1>
     <div className="flex flex-col justify-center items-center w-auto md:flex-row px-[10%]">
       <div className="grid lg:grid-cols-5 justify-center gap-4 px-2 md:grid-cols-3 md:px-2 sm: grid-cols-2">
-        {courses?.map((course: Course, index: number) => (  
+        {courses?.map((course: Course, index: number) => (
           <div key={index} className="w-full ">
-            <div style={{ backgroundColor: calculateColor(course.marks)}}
+            <div style={{ backgroundColor: CalculateColor(course.marks)}}
             onClick={() => handleClick(course)} className="text-[#FFA500] p-4 border border-gray-300 rounded-lg cursor-pointer hover: bg-transparent"
             >
               <h2 className="xl:text-lg font-semibold sm:text-sm break-all">{course.name}</h2>
