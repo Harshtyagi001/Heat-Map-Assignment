@@ -99,7 +99,8 @@ skillAccuracyMap.forEach(skillData => {
   skillAccuracy[skill] = parseFloat(accuracy.toFixed(2)); // Round to 2 decimal places
 });
 
-console.log('Skill Accuracy:', skillAccuracy);
+  console.log('Skill Accuracy:', skillAccuracy);
+  return skillAccuracy;
 
   } catch (error) {
     console.log('Error:', error);
