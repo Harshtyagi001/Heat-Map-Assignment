@@ -5,6 +5,8 @@ interface SkillData {
   totalQuestions: number;
   skill: string;
   overallAccuracy: number;
+  totalResponseTime: number;
+  averageResponseTime: number;
   difficultyStats: {
     difficulty: string;
     correct: number;
@@ -30,6 +32,8 @@ export default async function SkillAccuracyDifficultyWisePage() {
                 <p>Total Correct: {skillData.totalCorrect}</p>
                 <p>Total Questions: {skillData.totalQuestions}</p>
                 <p>Overall Accuracy: {skillData.overallAccuracy}%</p>
+                <p>Total Response Time: {skillData.totalResponseTime}</p>
+                <p>Average Response Time: {skillData.averageResponseTime} </p>
               </div>
               <div>
                 <h3 className="font-bold mb-2">Difficulty Stats</h3>
