@@ -23,8 +23,8 @@ export default function HeatMap({ courses }: HeatmapProps) {
 
     const MAX_MARKS=100;
     const MIN_MARKS=0;
-    const maxColor=[0,0,0]; // RGB values for maximum color (black)
-    const minColor=[255,255,255]; // RGB values for minimum color (white)
+    const minColor = [255, 230, 50];// RGB values for minimum color (yellow)
+    const maxColor = [0, 100, 0]; // RGB values for maximum color (deep green)
 
     // Normalize marks between 0 and 1
     const normalizedMarks=(marks-MIN_MARKS)/(MAX_MARKS-MIN_MARKS);

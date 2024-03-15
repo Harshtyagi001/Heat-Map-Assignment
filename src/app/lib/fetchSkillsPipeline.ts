@@ -26,7 +26,7 @@ export default async function getSkillAccuracy() {
     // Define the aggregation pipeline
     const pipeline = [
       { $sort: { createdAt: -1 } }, // Sort by timestamp in descending order
-      { $limit: 5 }, // Limit to last 5 mock tests
+      { $limit: 1 }, // Limit to last 5 mock tests
       {
         $lookup: {
           from: 'questions',
@@ -89,7 +89,6 @@ export default async function getSkillAccuracy() {
     const skillAccuracyMap:SkillData[] = result.length > 0 ? result[0].skillAccuracyMap : [];
 
     console.log('Skill Accuracy Map:', skillAccuracyMap);
-    
 
   const skillAccuracy: SkillAccuracy = {};
 
@@ -106,3 +105,4 @@ skillAccuracyMap.forEach(skillData => {
     console.log('Error:', error);
   }
 }
+
