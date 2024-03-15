@@ -33,7 +33,7 @@ export default async function getSkillAccuracyDifficultyWise() {
 
   const pipeline = [
   { $sort: { createdAt: -1 } }, // Sort by timestamp in descending order
-  { $limit: 100 },              // Limit to last n practice tests
+  // { $limit: 100 },              // Limit to last n practice tests
   {
     $lookup: {                  // Joining the questions collection with the tests collection
       from: 'questions',
@@ -144,7 +144,7 @@ console.log(result);
       difficulty: stat.difficulty,
       correct: stat.correct,
       total: stat.total,
-      accuracy: stat.accuracy
+      accuracy: Math.round(stat.accuracy)
     };
   });
 
@@ -155,7 +155,7 @@ console.log(result);
     totalCorrect: res.totalCorrect,
     totalQuestions: res.totalQuestions,
     skill: res.skill,
-    overallAccuracy: res.overallAccuracy,
+    overallAccuracy: Math.round(res.overallAccuracy),
     difficultyStats: difficultyStats
   };
 });
