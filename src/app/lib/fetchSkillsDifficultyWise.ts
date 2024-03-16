@@ -11,6 +11,8 @@ interface SkillAccuracyDataInterface {
   totalCorrect: number;
   totalQuestions: number;
   skill: string;
+  totalResponseTime: number; 
+  averageResponseTime: number;
   overallAccuracy: number;
   difficultyStats: DifficultyStatInterface[];
 }
@@ -33,7 +35,7 @@ export default async function getSkillAccuracyDifficultyWise() {
 
   const pipeline = [
   { $sort: { createdAt: -1 } }, // Sort by timestamp in descending order
-  // { $limit: 100 },              // Limit to last n practice tests
+  // { $limit: 5 },              // Limit to last n practice tests
   {
     $lookup: {                  // Joining the questions collection with the tests collection
       from: 'questions',
@@ -48,7 +50,8 @@ export default async function getSkillAccuracyDifficultyWise() {
       skill: '$questions.skill',
       userAnswer: { $arrayElemAt: ['$answers', { $indexOfArray: ['$questionIds', '$questions._id'] }] },
       correctAnswer: '$questions.correctOption',
-      difficulty: '$questions.difficulty'
+      difficulty: '$questions.difficulty',
+      questionTime: { $arrayElemAt: ['$questionTimeCapture', { $indexOfArray: ['$questionIds', '$questions._id'] }] }
     }
   },
 
@@ -71,6 +74,11 @@ correctAttemptsDifficultyWise: {
       0
     ]
   }
+},
+totalResponseTimeDiffWise: {
+  $sum: {
+    $cond: [{ $ne: ['$questionTime', ''] }, { $toInt: '$questionTime' }, 0]
+  }
 }
 }
 },
@@ -84,6 +92,7 @@ difficultyStats: {
     total: '$totalQuesDifficultyWise'
   }
 },
+totalResponseTime: { $sum: '$totalResponseTimeDiffWise' } ,         // Total response time for each skill
 totalCorrect: { $sum: '$correctAttemptsDifficultyWise' },
 totalQuestions: { $sum: '$totalQuesDifficultyWise' }      // Just also adding total correct attempts and total questions for each skill
 // Here will be getting something like [React]:  [{difficulty: 'easy', correct: 5, total: 7}, {difficulty: 'medium', correct: 7, total: 10}] totalCorrect: 12, totalQuestions: 17
@@ -95,6 +104,7 @@ _id:0,
 skill: '$_id',
 totalCorrect:1,
 totalQuestions:1,
+totalResponseTime:1,
 overallAccuracy: {    // Calculating the overall accuracy for each skill by using aggregation itself
   $cond: [
     { $gt: ['$totalQuestions', 0] },
@@ -102,6 +112,7 @@ overallAccuracy: {    // Calculating the overall accuracy for each skill by usin
     0
   ]
 },
+averageResponseTime: { $round: [{ $divide: ['$totalResponseTime', '$totalQuestions'] }, 0] }, // Calculate average response time
 difficultyStats: {       // Calculating the accuracy for each skill difficulty wise, could have done on client side as well but it may increase the speed so kept it inside pipeline only
   $map: {
     input: '$difficultyStats',
@@ -156,7 +167,9 @@ console.log(result);
     totalQuestions: res.totalQuestions,
     skill: res.skill,
     overallAccuracy: Math.round(res.overallAccuracy),
-    difficultyStats: difficultyStats
+    difficultyStats: difficultyStats,
+    totalResponseTime: res.totalResponseTime,
+    averageResponseTime: res.averageResponseTime
   };
 });
 
